@@ -14,7 +14,8 @@ const LandingScene = () => {
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    mountRef.current.appendChild(renderer.domElement);
+    const mount = mountRef.current;
+    mount.appendChild(renderer.domElement);
 
     // Create interactive particles/fluid web effect
     const geometry = new THREE.BufferGeometry();
@@ -45,7 +46,6 @@ const LandingScene = () => {
 
       if (intersects.length > 0) {
         // Custom interaction effect (like a wave or a bounce)
-        // const intersectedPoint = intersects[0].point; // Unused variable
         points.geometry.attributes.position.needsUpdate = true;
       }
     };
@@ -65,7 +65,9 @@ const LandingScene = () => {
     // Cleanup
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      mountRef.current.removeChild(renderer.domElement);
+      if (mount && renderer.domElement) {
+        mount.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
