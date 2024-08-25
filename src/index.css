@@ -98,7 +98,7 @@ body {
   left: 0;
   width: 100%;
   height: 4px;
-  background: #ff7f7f; /* Accent color */
+  background:#1e4398; /* Accent color */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
