@@ -1,3 +1,4 @@
+// src/components/MotionWrapper.js
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -8,6 +9,7 @@ const MotionWrapper = ({ children }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
+      key={window.location.pathname} // Ensure unique key on route change
     >
       {children}
     </motion.div>
