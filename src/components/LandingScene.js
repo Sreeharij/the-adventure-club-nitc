@@ -1,3 +1,4 @@
+// src/components/LandingScene.js
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -44,7 +45,7 @@ const LandingScene = () => {
 
       if (intersects.length > 0) {
         // Custom interaction effect (like a wave or a bounce)
-        const intersectedPoint = intersects[0].point;
+        // const intersectedPoint = intersects[0].point; // Unused variable
         points.geometry.attributes.position.needsUpdate = true;
       }
     };
@@ -64,9 +65,7 @@ const LandingScene = () => {
     // Cleanup
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
+      mountRef.current.removeChild(renderer.domElement);
     };
   }, []);
 
