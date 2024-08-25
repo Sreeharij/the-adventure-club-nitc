@@ -8,7 +8,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Ensuring the Google Font is applied */
 }
 
 #root {
@@ -18,31 +18,37 @@ html, body {
 }
 
 body {
-  background: #f5f5f5; /* Light background for better contrast */
+  background-color: #121212; /* Dark background color */
+  color: #e0e0e0; /* Light text color */
 }
 
 /* Navbar Styles */
 .header {
-  background: linear-gradient(135deg, #6ee7b7, #3b82f6); /* Gradient background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background: #1f1f1f; /* Dark background color for the header */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
   padding: 1rem;
+  color: #e0e0e0; /* Light text color */
 }
 
 /* Footer Styles */
 .footer {
-  background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-  color: white;
+  background: #1f1f1f; /* Dark background color for the footer */
+  color: #e0e0e0; /* Light text color */
   padding: 1rem;
   text-align: center;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Shadow at the top */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
 }
 
-/* src/index.css */
+/* Navbar Link Styles */
+.header a {
+  color: #e0e0e0; /* Light color for navbar links */
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'); /* Import Google Font */
-
-body {
-  font-family: 'Roboto', sans-serif;
+.header a:hover {
+  color: #ffffff; /* Slightly brighter color on hover */
+  transform: scale(1.05); /* Slight zoom effect */
 }
 
 /* Responsive Design */
@@ -56,22 +62,6 @@ body {
   }
 }
 
-/* src/index.css */
-
-/* Navbar Link Styles */
-.header a {
-  color: white;
-  text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
-}
-
-.header a:hover {
-  color: #e0e0e0; /* Light color on hover */
-  transform: scale(1.05); /* Slight zoom effect */
-}
-
-/* src/index.css */
-
 /* Example of a custom shape */
 .shape {
   width: 200px;
@@ -79,8 +69,6 @@ body {
   background: #3b82f6;
   clip-path: circle(50% at 50% 50%); /* Circular shape */
 }
-
-/* src/index.css */
 
 /* Example of a backdrop filter */
 .modal {
@@ -101,8 +89,6 @@ body {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deep shadow on hover */
 }
 
-/* src/index.css */
-
 /* Decorative elements */
 .header::before {
   content: "";
@@ -114,4 +100,9 @@ body {
   height: 4px;
   background: #ff7f7f; /* Accent color */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure all containers have dark background */
+.container {
+  background-color: #121212; /* Dark background color */
 }

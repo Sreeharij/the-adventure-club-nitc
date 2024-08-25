@@ -1,13 +1,10 @@
-// src/components/LandingScene.js
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const LandingScene = () => {
-  const [container, setContainer] = React.useState(null);
+  const mountRef = useRef(null);
 
   useEffect(() => {
-    if (!container) return; // Ensure container is set
-
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -16,7 +13,7 @@ const LandingScene = () => {
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
+    mountRef.current.appendChild(renderer.domElement);
 
     // Create interactive particles/fluid web effect
     const geometry = new THREE.BufferGeometry();
@@ -67,13 +64,13 @@ const LandingScene = () => {
     // Cleanup
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      if (container && renderer.domElement.parentElement === container) {
-        container.removeChild(renderer.domElement);
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
       }
     };
-  }, [container]);
+  }, []);
 
-  return <div ref={setContainer} />;
+  return <div ref={mountRef} />;
 };
 
 export default LandingScene;
