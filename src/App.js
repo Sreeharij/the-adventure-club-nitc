@@ -3,12 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Calendar from './pages/Calendar';
-import Events from './pages/Events';
-import Gallery from './pages/Gallery';
-import People from './pages/People';
-import Contact from './pages/Contact';
+import routes from './routes';
 
 const App = () => {
   return (
@@ -17,12 +12,9 @@ const App = () => {
         <Navbar />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/people" element={<People />} />
-            <Route path="/contact" element={<Contact />} />
+            {routes.map(({ path, component: Component }) => (
+              <Route key={path} path={path} element={<Component />} />
+            ))}
           </Routes>
         </main>
         <Footer />
