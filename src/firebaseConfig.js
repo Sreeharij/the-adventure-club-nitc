@@ -39,21 +39,21 @@ export const signInWithGoogle = async (setUser, setIsAdmin) => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+
     if (!user || !user.email) {
       alert("Login failed: No email detected.");
       await signOut(auth);
       return;
     }
-    
+
     const isAdmin = await checkIfAdmin(user);
     if (!isAdmin) {
-      alert("You are Not Admin!");
       await signOut(auth);
       setUser(null);
       setIsAdmin(false);
-      return;
+      return; 
     }
-    
+
     setUser(user);
     setIsAdmin(true);
   } catch (error) {
@@ -61,6 +61,7 @@ export const signInWithGoogle = async (setUser, setIsAdmin) => {
     alert("Login failed. Please try again.");
   }
 };
+
 
 export const logout = async (setUser, setIsAdmin) => {
   try {

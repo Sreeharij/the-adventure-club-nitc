@@ -1,7 +1,7 @@
 // src/pages/People.js
 import React, { useEffect, useState } from "react";
 import { db, storage, auth, checkIfAdmin } from "../firebaseConfig";
-import { collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import MotionWrapper from "../components/MotionWrapper";
 import PeopleCard from "../components/PeopleCard";
@@ -35,6 +35,7 @@ const People = () => {
           return { id: doc.id, ...data, imageUrl };
         })
       );
+      peopleList.sort((a, b) => a.order - b.order);
       setPeople(peopleList);
     };
 
@@ -56,21 +57,19 @@ const People = () => {
       name: newPerson.name,
       position: newPerson.position,
       imagePath: `people/${newPerson.image.name}`,
+      order: people.length + 1,
     });
 
-    setPeople([...people, { id: newDocRef.id, name: newPerson.name, position: newPerson.position, imageUrl }]);
+    setPeople([...people, { id: newDocRef.id, name: newPerson.name, position: newPerson.position, imageUrl, order: people.length + 1 }]);
     setShowForm(false);
   };
 
-  const handleDelete = async (name) => {
-    const confirmText = prompt(`Type "confirm" to delete ${name}:`);
-    if (confirmText !== "confirm") {
-      alert("Deletion canceled.");
-      return;
-    }
+  const handleDelete = async (id) => {
+    const confirmText = prompt("Type 'confirm' to delete this person:");
+    if (confirmText !== "confirm") return;
 
     try {
-      const personToDelete = people.find((person) => person.name === name);
+      const personToDelete = people.find((person) => person.id === id);
       if (!personToDelete) {
         alert("Person not found.");
         return;
@@ -78,14 +77,30 @@ const People = () => {
 
       const imageRef = ref(storage, personToDelete.imagePath);
       await deleteObject(imageRef);
-      await deleteDoc(doc(db, "people", personToDelete.id));
+      await deleteDoc(doc(db, "people", id));
 
-      setPeople(people.filter((person) => person.name !== name));
-      alert(`${name} has been deleted.`);
+      const updatedPeople = people.filter((person) => person.id !== id).map((p, index) => ({ ...p, order: index + 1 }));
+      setPeople(updatedPeople);
     } catch (error) {
       console.error("Error deleting person:", error);
       alert("Failed to delete person.");
     }
+  };
+
+  const handleMove = async (id, direction) => {
+    const index = people.findIndex(person => person.id === id);
+    if (index === -1 || (direction === "up" && index === 0) || (direction === "down" && index === people.length - 1)) return;
+
+    const newOrder = [...people];
+    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    [newOrder[index], newOrder[swapIndex]] = [newOrder[swapIndex], newOrder[index]];
+
+    await Promise.all([
+      updateDoc(doc(db, "people", newOrder[index].id), { order: index + 1 }),
+      updateDoc(doc(db, "people", newOrder[swapIndex].id), { order: swapIndex + 1 })
+    ]);
+
+    setPeople([...newOrder]);
   };
 
   return (
@@ -100,7 +115,9 @@ const People = () => {
               position={person.position}
               imageUrl={person.imageUrl}
               isAdmin={isAdmin}
-              onDelete={handleDelete}
+              onDelete={() => handleDelete(person.id)}
+              onMoveUp={() => handleMove(person.id, "up")}
+              onMoveDown={() => handleMove(person.id, "down")}
             />
           ))}
         </div>
