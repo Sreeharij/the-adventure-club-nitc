@@ -1,4 +1,3 @@
-// src/pages/People.js
 import React, { useEffect, useState } from "react";
 import { db, storage, auth, checkIfAdmin } from "../firebaseConfig";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
@@ -12,6 +11,13 @@ const People = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [newPerson, setNewPerson] = useState({ name: "", position: "", image: null });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
@@ -87,26 +93,11 @@ const People = () => {
     }
   };
 
-  const handleMove = async (id, direction) => {
-    const index = people.findIndex(person => person.id === id);
-    if (index === -1 || (direction === "up" && index === 0) || (direction === "down" && index === people.length - 1)) return;
-
-    const newOrder = [...people];
-    const swapIndex = direction === "up" ? index - 1 : index + 1;
-    [newOrder[index], newOrder[swapIndex]] = [newOrder[swapIndex], newOrder[index]];
-
-    await Promise.all([
-      updateDoc(doc(db, "people", newOrder[index].id), { order: index + 1 }),
-      updateDoc(doc(db, "people", newOrder[swapIndex].id), { order: swapIndex + 1 })
-    ]);
-
-    setPeople([...newOrder]);
-  };
-
   return (
     <MotionWrapper>
       <main className="container mx-auto my-16 px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-blue-500">Our Team</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center">
           {people.map((person) => (
             <PeopleCard
@@ -116,8 +107,6 @@ const People = () => {
               imageUrl={person.imageUrl}
               isAdmin={isAdmin}
               onDelete={() => handleDelete(person.id)}
-              onMoveUp={() => handleMove(person.id, "up")}
-              onMoveDown={() => handleMove(person.id, "down")}
             />
           ))}
         </div>
