@@ -35,14 +35,26 @@ const Navbar = () => {
         {/* Menu Items */}
         <div className={`absolute md:static top-full left-0 w-full md:w-auto bg-gray-800 md:bg-transparent transition-all duration-300 ease-in-out ${isOpen ? "block" : "hidden"} md:flex md:items-center`}>
           {routes.map(({ path, name }) => (
-            <Link key={path} to={path} className="block py-2 px-4 text-gray-300 hover:bg-gray-700 hover:text-white">
+            <Link 
+              key={path} 
+              to={path} 
+              className="block py-2 px-4 text-gray-300 hover:bg-gray-700 hover:text-white"
+              onClick={() => setIsOpen(false)} // Close menu on selection
+            >
               {name}
             </Link>
           ))}
 
           {/* Admin Login/Logout Button */}
           <button
-            onClick={user ? () => logout(setUser, setIsAdmin) : () => signInWithGoogle(setUser, setIsAdmin)}
+            onClick={() => {
+              if (user) {
+                logout(setUser, setIsAdmin);
+              } else {
+                signInWithGoogle(setUser, setIsAdmin);
+              }
+              setIsOpen(false); // Close menu after clicking login/logout
+            }}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg ml-4 hover:bg-blue-700 transition"
           >
             {user ? "Logout" : "Admin Login"}
