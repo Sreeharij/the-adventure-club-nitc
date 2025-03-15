@@ -23,11 +23,6 @@ const Home = () => {
             <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
               Discover and enjoy thrilling outdoor adventures with our vibrant community. Explore events, join activities, and connect with fellow enthusiasts.
             </p>
-            {!isMobile && (
-              <button className="bg-blue-500 px-6 py-3 text-white rounded-lg hover:bg-blue-600 transition">
-                Explore Events
-              </button>
-            )}
           </div>
         </section>
       </main>

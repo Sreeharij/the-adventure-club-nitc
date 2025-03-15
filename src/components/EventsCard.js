@@ -28,7 +28,7 @@ const EventsCard = ({ event, isAdmin, onDelete }) => {
           className="w-full h-64 object-cover rounded-lg"
         />
         <h3 className="text-lg font-semibold mt-2">{event.title}</h3>
-        <p className="text-sm text-gray-400">{new Date(event.date).toDateString()}</p>
+        {/* <p className="text-sm text-gray-400">{new Date(event.date).toDateString()}</p> */}
         <p className="mt-1 text-gray-300">
           {event.description.length > 100
             ? event.description.substring(0, 100) + "..."
