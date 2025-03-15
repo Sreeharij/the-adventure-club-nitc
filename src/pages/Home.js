@@ -1,31 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import MotionWrapper from '../components/MotionWrapper';
-import LandingScene from '../components/LandingScene';
+import React, { useState, useEffect } from "react";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebaseConfig"; // Ensure this points to your Firebase config
+import MotionWrapper from "../components/MotionWrapper";
 
 const Home = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [bannerUrl, setBannerUrl] = useState(null);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const fetchBanner = async () => {
+      try {
+        const bannerRef = ref(storage, "banner"); // Path in Firebase Storage
+        const url = await getDownloadURL(bannerRef);
+        setBannerUrl(url);
+      } catch (error) {
+        console.error("Error fetching banner:", error);
+      }
+    };
+
+    fetchBanner();
   }, []);
 
   return (
     <MotionWrapper>
-      <main className="bg-gray-900 text-gray-200 pt-20"> {/* Added padding-top to prevent overlap */}
-        <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center text-center">
-          <LandingScene />
-          <div className="z-10 px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-blue-400">
-              Welcome to The Adventure Club NITC
-            </h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
-              Discover and enjoy thrilling outdoor adventures with our vibrant community. Explore events, join activities, and connect with fellow enthusiasts.
-            </p>
-          </div>
-        </section>
-      </main>
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        {bannerUrl ? (
+          <img 
+            src={bannerUrl} 
+            alt="Homepage Banner" 
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        ) : (
+          <p className="text-white">Loading banner...</p>
+        )}
+
+        <div className="relative z-10 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg">
+          <h1 className="text-4xl md:text-5xl font-bold">Welcome to The Adventure Club NITC</h1>
+          <p className="text-lg md:text-xl mt-4">
+            Explore, Discover, and Experience Thrilling Outdoor Adventures.
+          </p>
+        </div>
+      </section>
     </MotionWrapper>
   );
 };
