@@ -152,16 +152,39 @@ const Gallery = () => {
         <h2 className="text-3xl font-bold text-center mb-10 text-blue-700">Gallery</h2>
         {lightbox.isOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-            <button onClick={() => navigateLightbox(-1)} className="absolute left-5 text-white text-3xl">◀</button>
+            {/* Left Navigation Button */}
+            <button 
+              onClick={() => navigateLightbox(-1)} 
+              className="absolute left-2 sm:left-5 text-white text-3xl bg-gray-800 px-3 py-2 rounded-full z-50"
+              style={{ visibility: lightbox.index > 0 ? 'visible' : 'hidden' }} // Hide if first image
+            >
+              ◀
+            </button>
 
-            <div className="relative">
-              <img src={sections.find((s) => s.id === lightbox.sectionId)?.images[lightbox.index]} className="max-w-[90vw] max-h-[90vh] rounded-lg" />
-              <button onClick={closeLightbox} className="absolute top-2 right-2 bg-white text-red-500 rounded-full p-2">✕</button>
+            <div className="relative flex justify-center">
+              <img 
+                src={sections.find((s) => s.id === lightbox.sectionId)?.images[lightbox.index]} 
+                className="max-w-[90vw] max-h-[80vh] rounded-lg"
+              />
+              <button 
+                onClick={closeLightbox} 
+                className="absolute top-2 right-2 bg-white text-red-500 rounded-full p-2 z-50"
+              >
+                ✕
+              </button>
             </div>
 
-            <button onClick={() => navigateLightbox(1)} className="absolute right-5 text-white text-3xl">▶</button>
+            {/* Right Navigation Button */}
+            <button 
+              onClick={() => navigateLightbox(1)} 
+              className="absolute right-2 sm:right-5 text-white text-3xl bg-gray-800 px-3 py-2 rounded-full z-50"
+              style={{ visibility: lightbox.index < sections.find((s) => s.id === lightbox.sectionId)?.images.length - 1 ? 'visible' : 'hidden' }} // Hide if last image
+            >
+              ▶
+            </button>
           </div>
         )}
+
 
 
         {isAdmin && (
